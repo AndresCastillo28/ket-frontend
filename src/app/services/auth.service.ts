@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Inject, inject } from '@angular/core'; // 'Inject' debe tener 'I' mayúscula
+import { Injectable, inject } from '@angular/core';
 import { SignUpInterface } from '../interfaces/signup-request.interface';
 import { Observable, catchError, map, of } from 'rxjs';
 import { ApiResponse } from '../interfaces/api-response.interface';
 import { UserInterface } from '../interfaces/user.interface';
-import { AuthResponseInterface } from '../interfaces/auth.response.interface';
 import { LoginRequestInterface } from '../interfaces/login-request.interface';
 import { LoginResponseInterface } from '../interfaces/login-response.interface';
 import { Router } from '@angular/router';
 import { SnackbarService } from './snackbar.service';
+import { AuthenticatedUserInterface } from '../interfaces/authenticated-user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,7 @@ export class AuthService {
   private baseUrl = '/auth';
   private route = inject(Router);
   private snackbarService = inject(SnackbarService);
+  private currentUser!: AuthenticatedUserInterface | undefined;
 
   signIn(
     data: LoginRequestInterface
@@ -26,6 +27,14 @@ export class AuthService {
       `${this.baseUrl}/signin`,
       data
     );
+  }
+
+  getCurrentUser(): AuthenticatedUserInterface | undefined {
+    return this.currentUser;
+  }
+
+  setCurrentUser(user: AuthenticatedUserInterface | undefined): void {
+    this.currentUser = user;
   }
 
   signup(data: SignUpInterface): Observable<ApiResponse<UserInterface>> {
@@ -37,10 +46,9 @@ export class AuthService {
 
   logout(): void {
     localStorage.clear();
-    this.route.navigate(["/"]);
-    this.snackbarService.openSnackBar(
-      'Session closed succesfully.'
-    );
+    this.setCurrentUser(undefined);
+    this.route.navigate(['/']);
+    this.snackbarService.openSnackBar('Session closed succesfully.');
   }
 
   checkAuthentication(): Observable<boolean> {
@@ -48,16 +56,20 @@ export class AuthService {
     if (!token) {
       return of(false);
     }
-    console.log('here')
     return this.http
-      .get<ApiResponse<AuthResponseInterface>>(`${this.baseUrl}/renew`)
+      .get<ApiResponse<LoginResponseInterface>>(`${this.baseUrl}/renew`)
       .pipe(
-        map((response: ApiResponse<AuthResponseInterface>) => {
+        map((response: ApiResponse<LoginResponseInterface>) => {
           if (response.data) {
+            const data = {
+              id: response.data.id,
+              name: response.data.name,
+              role: response.data.role,
+            };
+            this.setCurrentUser(data);
             localStorage.setItem('token', response.data.token);
             return true;
           }
-          console.log('here')
           return false;
         }),
         catchError((error) => {

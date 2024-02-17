@@ -13,12 +13,7 @@ export class LayoutPageComponent {
   public dialog = inject(MatDialog);
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(SignUpComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // this.animal = result;
-    });
+    this.dialog.open(SignUpComponent);
   }
 
   openDialogSignIn(): void {

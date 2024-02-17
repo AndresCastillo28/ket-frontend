@@ -1,0 +1,56 @@
+<div class="col bg-white h-100 d-flex flex-column border rounded shadow-lg">
+  <!-- Contenedor de mensajes con flex-grow-1 para llenar el espacio disponible -->
+  <div class="messages flex flex-grow-1" #scrollMe>
+    <mat-list role="list">
+      <mat-list-item
+        role="listitem"
+        class="d-flex"
+        *ngFor="let message of messages"
+        [ngClass]="{ 'text-end': message.user._id === user.id }"
+      >
+        <!-- <mat-icon class="text-end" matBadge="M" matListItemIcon
+          >person</mat-icon
+        > -->
+        <div matListItemTitle>
+          <span
+            [ngClass]="
+              message.user._id === user.id
+                ? 'bg-primary text-white'
+                : 'bg-secondary text-white'
+            "
+            class="rounded p-1"
+          >
+            {{ message.message }}
+          </span>
+        </div>
+        <div matListItemLine>
+          {{ message.user.name }} -
+          <span
+            *ngIf="message.user.role.name === 'moderator'"
+            class="text-success fw-bold"
+          >
+            {{ message.user.role.name | titlecase }} -
+          </span>
+          {{ message.date | date : "medium" }}
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <mat-form-field appearance="outline" class="w-75">
+      <mat-label>Send message...</mat-label>
+      <input
+        matInput
+        type="text"
+        [(ngModel)]="newMessage"
+        (keyup.enter)="sendMessage()"
+        placeholder="Type something..."
+      />
+    </mat-form-field>
+    &nbsp;
+    <button mat-icon-button color="primary" (click)="sendMessage()">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</div>

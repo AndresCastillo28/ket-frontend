@@ -7,11 +7,26 @@
       />
       <span class="example-spacer"></span>
       &nbsp;
-      <button mat-raised-button (click)="logout()">Cerrar sesión</button>
+      <span>{{ user.name }} -
+        <span class="text-info">
+          {{ user.role | titlecase }}
+        </span>
+        </span>
+      &nbsp;
+      <button type="button" matTooltip="Logout" color="warn" mat-mini-fab (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
   
-    <div class="container d-flex align-items-center justify-content-center h-75">
-      Working...!
+    <div class="container mt-4 h-75">
+      <div class="row h-100">
+        <div class="col border rounded bg-F16357 d-flex align-items-center">
+          <youtube-player videoId="gRgTiQCRFxI"></youtube-player>
+        </div>
+        <div class="col h-100">
+          <app-chat />
+        </div>
+      </div>
     </div>
   </div>
   

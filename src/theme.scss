@@ -1,0 +1,43 @@
+// @use '@angular/material' as mat;
+// @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
+
+
+// @include mat.core();
+// $ket-primary: (
+//   50: #FDE0D4, // Más claro
+//   100: #FCBBA9,
+//   200: #FA967E,
+//   300: #F87053,
+//   400: #F65339,
+//   500: #FD531E, // Color base
+//   600: #F64E1B,
+//   700: #F36655, // Color secundario más oscuro
+//   800: #F05F4C,
+//   900: #EC5739  // Más oscuro
+// );
+
+// $ket-primary-constrast: (
+//   50: #ffffff,
+//   100: #ffffff,
+//   200: #ffffff,
+//   300: #ffffff,
+//   400: #ffffff,
+//   500: #ffffff,
+//   600: #ffffff,
+//   700: #ffffff,
+//   800: #ffffff
+// );
+
+// $ket-primary: map-merge($ket-primary, (contrast: $ket-primary-constrast));
+
+
+
+// $ket-primary-define: mat.define-palette($ket-primary,700);
+
+// $usco-theme: mat.define-light-theme((
+//   color: (
+//     primary: $ket-primary-define,
+//   )
+// ));
+
+// @include mat.all-component-themes($usco-theme);

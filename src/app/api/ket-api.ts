@@ -33,7 +33,6 @@ export class AuthInterceptor implements HttpInterceptor {
         },
       });
     }
-    console.log(this.baseUrl);
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {

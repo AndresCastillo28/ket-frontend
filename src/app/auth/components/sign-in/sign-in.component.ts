@@ -69,6 +69,12 @@ export class SignInComponent {
             res.message || 'Login successfully.'
           );
           this.dialogRef.close();
+          const data = {
+            id: res.data.id,
+            name: res.data.name,
+            role: res.data.role,
+          };
+          this.authService.setCurrentUser(data);
           this.router.navigate(['/dashboard']);
         } else {
           this.snackbarService.openSnackBar(
