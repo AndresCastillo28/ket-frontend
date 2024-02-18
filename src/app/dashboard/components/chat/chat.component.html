@@ -1,56 +1,42 @@
-<div class="col bg-white h-100 d-flex flex-column border rounded shadow-lg">
-  <!-- Contenedor de mensajes con flex-grow-1 para llenar el espacio disponible -->
-  <div class="messages flex flex-grow-1" #scrollMe>
-    <mat-list role="list">
-      <mat-list-item
-        role="listitem"
-        class="d-flex"
-        *ngFor="let message of messages"
-        [ngClass]="{ 'text-end': message.user._id === user.id }"
-      >
-        <!-- <mat-icon class="text-end" matBadge="M" matListItemIcon
-          >person</mat-icon
-        > -->
-        <div matListItemTitle>
-          <span
-            [ngClass]="
-              message.user._id === user.id
-                ? 'bg-primary text-white'
-                : 'bg-secondary text-white'
-            "
-            class="rounded p-1"
-          >
-            {{ message.message }}
-          </span>
-        </div>
-        <div matListItemLine>
-          {{ message.user.name }} -
-          <span
-            *ngIf="message.user.role.name === 'moderator'"
-            class="text-success fw-bold"
-          >
-            {{ message.user.role.name | titlecase }} -
-          </span>
-          {{ message.date | date : "medium" }}
-        </div>
-      </mat-list-item>
-    </mat-list>
+<div class="messages">
+  <div class="messages-header d-flex justify-content-between align-items-center">
+    <h2>Messages</h2>
+    <div class="container d-flex justify-content-end">
+        <mat-icon color="primary" [matTooltip]="user" *ngFor="let user of onlineUsers">person</mat-icon>
+    </div>
   </div>
+  <mat-divider />
+  <div *ngIf="isLoadingMessages" class="container d-flex justify-content-center mt-5 h-75">
+    <mat-spinner [diameter]="60" />
+  </div>
+  <div class="chat-area" *ngIf="!isLoadingMessages" #scrollMe>
+    <div [ngClass]="{ 'sender' : message.user._id === user.id }" class="chat-bubble-container sender" *ngFor="let message of messages">
+      <div class="chat-bubble">
+        <span style="font-size: 0.7rem; max-width: 50px;">
+          {{ message.user.name }} 
+          <span class="fw-bold text-success" *ngIf="message.user.role.name === 'moderator'">
+            - {{ message.user.role.name | uppercase }}
+          </span>
+        </span>
+        <span style="display: block;">
 
-  <div class="d-flex justify-content-center">
-    <mat-form-field appearance="outline" class="w-75">
-      <mat-label>Send message...</mat-label>
-      <input
-        matInput
-        type="text"
-        [(ngModel)]="newMessage"
-        (keyup.enter)="sendMessage()"
-        placeholder="Type something..."
-      />
-    </mat-form-field>
-    &nbsp;
-    <button mat-icon-button color="primary" (click)="sendMessage()">
-      <mat-icon>send</mat-icon>
+          {{ message.message }}
+        </span>
+        <span class="chat-date">
+          {{ message.date | date : "short" }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="input-area">
+    <mat-form-field appearance="outline"
+    *ngIf="!isLoadingMessages"
+    >
+    <input matInput placeholder="Type something..." [(ngModel)]="newMessage"
+    (keyup.enter)="sendMessage()" />
+    <button mat-icon-button matSuffix (click)="sendMessage()">
+      <mat-icon color="primary">send</mat-icon>
     </button>
+    </mat-form-field>
   </div>
 </div>

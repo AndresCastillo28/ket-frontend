@@ -5,7 +5,7 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 const routes: Routes = [
   {
     path: '',
-    component: LayoutPageComponent
+    component: LayoutPageComponent,
   }
 ];
 

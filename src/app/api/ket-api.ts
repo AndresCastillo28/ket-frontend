@@ -37,10 +37,11 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401 || error.status === 403) {
+          localStorage.clear();
           //   message('info', 'Sesión expirada, por favor vuelve a ingresar', 5000);
           this.router.navigate(['/']);
         }
-        return throwError(() => new Error(error.message));
+        return throwError(() => error);
       })
     );
   }

@@ -63,7 +63,6 @@ export class SignInComponent {
     this.authService.signIn(this.signInForm.value).subscribe({
       next: (res) => {
         if (res.success && res.data) {
-          console.log(res.data);
           localStorage.setItem('token', res.data.token);
           this.snackbarService.openSnackBar(
             res.message || 'Login successfully.'
@@ -85,6 +84,9 @@ export class SignInComponent {
       },
       error: (err) => {
         let errorMessage = 'Something went wrong..';
+
+        if (err.error.message) errorMessage = err.error.message;
+
         this.snackbarService.openSnackBar(errorMessage);
         this.isSendingData = false;
         console.error(err);

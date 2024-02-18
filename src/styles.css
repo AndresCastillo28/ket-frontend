@@ -14,7 +14,8 @@ body {
   background-color: #F16357;
 }
 
-/* .row>* {
-  padding-right: 0 !important;
-  padding-left: 0 !important;
-} */
+
+.mat-mdc-snack-bar-container .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) { 
+  color: white !important
+}
+

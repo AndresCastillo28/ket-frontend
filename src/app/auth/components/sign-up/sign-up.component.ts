@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -85,24 +86,24 @@ export class SignUpComponent {
     if (this.signUpForm.invalid) {
       this.signUpForm.markAllAsTouched();
       this.snackbarService.openSnackBar(
-        'Por favor, corrija los errores en el formulario antes de enviarlo.'
+        'Please correct any errors in the form before submitting it.'
       );
       return;
     }
 
     this.authService.signup(this.signUpForm.value).subscribe({
       next: (res) => {
-        this.snackbarService.openSnackBar('Registrado exitosamente.');
-        console.log(res);
-        // Limpia el formulario después de una suscripción exitosa
+        this.snackbarService.openSnackBar('Signed up successfully.');
         this.signUpForm.reset();
-        // Opcional: Restablece cualquier estado adicional relacionado con el formulario aquí
-        this.hidePassword = true; // Si quieres restablecer el estado de la visualización de la contraseña
+        this.hidePassword = true; 
       },
-      error: (err) => {
-        this.snackbarService.openSnackBar('Something went wrong..');
-        console.error(err);
+      error: (err: any) => {
+        let errorMessage = 'Something went wrong..';
+
+        if (err.error.message) errorMessage = err.error.message;
+        this.snackbarService.openSnackBar(err.error.message);
       },
     });
+    
   }
 }

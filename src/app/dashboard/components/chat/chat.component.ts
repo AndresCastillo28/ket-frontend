@@ -20,6 +20,7 @@ import { SocketService } from 'src/app/services/socket.service';
 export class ChatComponent implements OnInit, OnDestroy {
   messages: any[] = [];
   newMessage: string = '';
+  public onlineUsers: any[] = [];
 
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
@@ -27,6 +28,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   private messageService = inject(MessagesService);
   public user!: AuthenticatedUserInterface;
   private authService = inject(AuthService);
+  public isLoadingMessages = true;
 
 
   ngOnInit(): void {
@@ -36,22 +38,34 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.scrollToBottom();
     this.socketService.connect();
     this.socketService.onMessage().subscribe((message: any) => {
-      console.log('here');
       this.messages.push(message);
+      setTimeout(() => this.scrollToBottom(), 10); 
     });
+
+    this.socketService.onUsersOnline().subscribe((users: any[]) => {
+      this.onlineUsers = users; 
+      console.log(users)
+  });
   }
+  
 
   loadMessages() {
     this.messageService.getAll().subscribe({
       next: (res) => {
-        if (res.data) this.messages = res.data;
-        console.log(res.data);
+        if (res.data) {
+          this.messages = res.data;
+          console.log(res.data);
+          this.isLoadingMessages = false;
+          setTimeout(() => this.scrollToBottom(), 0);
+        }
       },
       error: (err) => {
         console.error(err);
+        this.isLoadingMessages = false;
       },
     });
   }
+  
 
   private scrollToBottom(): void {
     try {
@@ -61,9 +75,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    // Verifica si hay un mensaje para enviar
     if (!this.newMessage.trim()) {
-      return; // No hacer nada si el mensaje está vacío o solo contiene espacios
+      return; 
     }
   
     this.socketService.sendMessage({
@@ -71,9 +84,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       user: this.user.id, 
     });
   
-    this.newMessage = ''; // Limpia el campo de entrada después de enviar
-  
-    // Coloca el desplazamiento hacia abajo en un timeout para dar tiempo a que el mensaje se agregue al DOM
+    this.newMessage = ''; 
     setTimeout(() => this.scrollToBottom(), 10);
   }
   

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
 import { AuthService } from './auth.service';
@@ -38,6 +37,15 @@ export class SocketService {
   sendMessage(data: any) {
     this.socket.emit('some_event', data);
   }
+
+  onUsersOnline(): Observable<any[]> {
+    return new Observable((observer) => {
+        this.socket.on('users online', (users: any[]) => {
+            observer.next(users);
+        });
+    });
+}
+
 
   onMessage() {
     return new Observable((observer) => {

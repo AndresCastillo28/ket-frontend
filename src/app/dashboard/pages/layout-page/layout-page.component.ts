@@ -1,6 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  inject,
+} from '@angular/core';
 import { AuthenticatedUserInterface } from 'src/app/interfaces/authenticated-user.interface';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -19,8 +21,8 @@ export class LayoutPageComponent implements OnInit {
 
     const tag = document.createElement('script');
 
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag)
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.body.appendChild(tag);
   }
 
   logout() {

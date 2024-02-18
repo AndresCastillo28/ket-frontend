@@ -7,12 +7,14 @@ import { LayoutPageComponent } from './pages/layout-page/layout-page.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
+import { SafePipe } from '../pipes/safe.pipe';
 
 
 @NgModule({
   declarations: [
     LayoutPageComponent,
-    ChatComponent
+    ChatComponent,
+    SafePipe
   ],
   imports: [
     CommonModule,
