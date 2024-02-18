@@ -1,0 +1,69 @@
+<div class="messages">
+  <div
+    class="messages-header d-flex justify-content-between align-items-center"
+  >
+    <h2>Messages</h2>
+    <div class="container d-flex justify-content-end">
+      <mat-icon
+        color="primary"
+        *ngFor="let userConnected of onlineUsers"
+        [matTooltip]="
+          userConnected.uid === user.id ? 'You' : userConnected.name
+        "
+      >
+        person
+      </mat-icon>
+    </div>
+  </div>
+  <mat-divider />
+  <div
+    *ngIf="isLoadingMessages"
+    class="container d-flex justify-content-center mt-5 h-75"
+  >
+    <mat-spinner [diameter]="60" />
+  </div>
+  <div class="chat-area" *ngIf="!isLoadingMessages" #scrollMe>
+    <div
+      [ngClass]="{ sender: message.user._id === user.id }"
+      class="chat-bubble-container sender"
+      *ngFor="let message of messages"
+    >
+      <div class="chat-bubble">
+        <span style="font-size: 0.7rem; max-width: 50px">
+          <span *ngIf="message.user._id === user.id; else otherUser">
+            You
+          </span>
+          <ng-template #otherUser>
+            {{ message.user.name }}
+          </ng-template>
+
+          <span
+            class="fw-bold text-success"
+            *ngIf="message.user.role.name === 'moderator'"
+          >
+            - {{ message.user.role.name | uppercase }}
+          </span>
+        </span>
+        <span style="display: block">
+          {{ message.message }}
+        </span>
+        <span class="chat-date">
+          {{ message.date | date : "short" }}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="input-area">
+    <mat-form-field appearance="outline" *ngIf="!isLoadingMessages">
+      <input
+        matInput
+        placeholder="Type something..."
+        [(ngModel)]="newMessage"
+        (keyup.enter)="sendMessage()"
+      />
+      <button mat-icon-button matSuffix (click)="sendMessage()">
+        <mat-icon color="primary">send</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+</div>
